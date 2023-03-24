@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<script>
+var request;
+function loadRegisterProviderForm(){
+	document.getElementById("tableDataEquipment").style.display="none";
+	document.getElementById("addEquipments").style.display="none";
+	document.getElementById("tableProviderData").style.display="none";
+	
+	document.getElementById("providerAddForm").style.display="contents";
+} 
+function viewProvider(){
+	document.getElementById("tableDataEquipment").style.display="none";
+	document.getElementById("addEquipments").style.display="none";
+	document.getElementById("tableProviderData").style.display="contents";
+	document.getElementById("providerAddForm").style.display="none";
+	sendProviderInfo();
+	
+}
+
+function sendProviderInfo(){
+	let equipmentProviderId = document.getElementById("providerIdInput").value;
+	console.log(equipmentProviderId);
+	var url='http://localhost:8080/FramerSchemeV1/eqp/equipmentproviderdb/displayall' + equipmentProviderId;
+	if(window.XMLHttpRequest){
+		request=new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject){ 
+		request=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	try {
+		request.onreadystatechange=getInfoProvider;
+		request.open("GET",url,true);
+		request.send();
+		
+	} catch (e) {
+		alert("Unable to connect to the server");
+	}
+}
+
+
+function getInfoProvider()
+{
+	if(request.readyState==0){
+		console.log("request not initialized");
+	}
+	else{
+		console.log("request initialized");
+	}
+	if(request.readyState==1){
+		console.log("connected to the server");
+	}
+	else{
+		console.log("request initialized");
+	}
+	if(request.readyState==4) { 
+		var value=[]
+		value= JSON.parse(request.response);
+	    console.log(value);
+	    let row ='';
+	    
+		   
+	    value.forEach((v)=>{
+	    	 row +=`<tr>`;
+	    	for(let key in v )
+	    		{
+	    		row+=`<td>${v[key]}</td>`;
+	    		}
+	    	row +=`</tr>`;
+	    
+	    })
+	    document.getElementById("Provider-table-body").innerHTML =row;
+	   /*  equipmentProviderId = document.getElementById("providerIdInputAddForm").value;
+		equipmentProviderName = document.getElementById("providerNameInputAddForm").value;
+		contact = document.getElementById("contactInputAddForm").value;
+		emailId = document.getElementById("emailInputAddForm").value;
+		companyName=document.getElementById("companyNameInputAddForm").value;
+		equipmentProviderRating = document.getElementById("providerRatingInputAddForm").value; */
+    }
+	    
+	   
+	  
+	     
+	    /* document.getElementById("Provider-table-body").innerHTML =row; */
+    
+}
+
+
+
+
+
+
+function sendProviderDetailInfo(){
+	
+	var equipmentProviderId = document.getElementById("providerIdInputAddForm").value;
+	equipmentProviderName = document.getElementById("providerNameInputAddForm").value;
+	contact = document.getElementById("contactInputAddForm").value;
+	emailId = document.getElementById("emailInputAddForm").value;
+	companyName=document.getElementById("companyNameInputAddForm")
+	equipmentProviderRating = document.getElementById("providerRatingInputAddForm").value;
+	
+	alert(equipmentProviderId);
+	
+	
+	let data = {
+			"equipmentProviderId": 632157953362,
+		    "equipmentProviderName": "Priyank",
+		    "contact": 9842556129,
+		    "emailId": "Priyank@gmail.com",
+		    "companyName":"SR Farm",
+		    "equipmentProviderRating": 4.0,
+		    "equipments": null,
+    };
+	data.equipmentProviderId = equipmentProviderId;
+	data.equipmentProviderName = equipmentProviderName;
+	data.contact = contact;
+	data.emailId = emailId;
+	data.companyName=companyName;
+	data.equipmentProviderRating = equipmentProviderRating ;
+	
+	
+	var url='http://localhost:8080/FramerSchemeV1/eqp/equipmentproviderdb/adding';
+	
+	
+	console.log(url);
+	
+	if(window.XMLHttpRequest){
+		request=new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject){ 
+		request=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	try {
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/json");
+		request.send(JSON.stringify(data));
+		location.reload();
+		alert("Provider added")
+		
+	} catch (e) {
+		alert("Provider cannot be added");
+	}
+}
+
+
+
+
+
+
+
+function viewEquipment(){
+	document.getElementById("tableDataEquipment").style.display="none";
+	document.getElementById("addEquipments").style.display="contents";
+	document.getElementById("tableProviderData").style.display="none";
+
+	console.log("clicked");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function sendEquipmentsInfo(){
+	
+	let equipmentId = document.getElementById("equipmentIdInput").value;
+	console.log(equipmentId);
+	var url='http://localhost:8080/FramerSchemeV1/eqp/equipmentdb/displayall' + equipmentId;
+	if(window.XMLHttpRequest){
+		request=new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject){ 
+		request=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	try {
+		request.onreadystatechange=getInfoEquipment;
+		request.open("GET",url,true);
+		request.send();
+		
+	} catch (e) {
+		alert("Unable to connect to the server");
+	}
+}
+
+
+function getInfoEquipment()
+{
+	if(request.readyState==0){
+		console.log("request not initialized");
+	}
+	else{
+		console.log("request initialized");
+	}
+	if(request.readyState==1){
+		console.log("connected to the server");
+	}
+	else{
+		console.log("request initialized");
+	}
+	if(request.readyState==4) { 
+		var value=[]
+		value= JSON.parse(request.response);
+	    console.log(value);
+	    let row ='';
+	    
+	   
+	    value.forEach((v)=>{
+	    	 row +=`<tr>`;
+	    	for(let key in v )
+	    		{
+	    		row+=`<td>${v[key]}</td>`;
+	    		}
+	    	row +=`</tr>`;
+	    
+	    })
+	     
+	    document.getElementById("Equipment-table-body").innerHTML =row;
+    }
+}
+
+
+function addEquipments(){
+	document.getElementById("tableDataEquipment").style.display="none";
+	document.getElementById("addEquipments").style.display="contents";
+	document.getElementById("tableProviderData").style.display="none";
+
+	console.log("clicked");
+}
+function addEquipmentDetail(){
+	var equipmentId = document.getElementById("equipmentIdInput").value;
+	equipmentName= document.getElementById("equipmentNameInput").value;
+	price= document.getElementById("priceInput").value;
+	
+	alert(equipmentId);
+	
+	
+	let data = {
+	        "equipmentId":7,
+	        "equipmentName":"cutter",
+	        "price":5000
+	    };
+	
+	data.equipmentId = equipmentId;
+	
+	
+	
+	data.equipmentName = equipmentName;
+	data.price = price;
+	
+	
+	var url='http://localhost:8080/FramerSchemeV1/eqp/equipmentdb/adding';
+	
+	
+	console.log(url);
+	
+	if(window.XMLHttpRequest){
+		request=new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject){ 
+		request=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	try {
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/json");
+		request.send(JSON.stringify(data));
+		location.reload();
+		alert("Equipment added")
+		
+	} catch (e) {
+		alert("Equipment cannot be added");
+	}
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+
+<nav class="navbar bg-body-tertiary">
+		  <div class="container-fluid">
+		  
+		    <a class="navbar-brand" href="#">
+		     Equipment Page
+		    </a>
+		  </div>
+	</nav>
+
+	
+
+
+<body style="background-color:aquamarine;">
+<br><br>
+<div style="padding-left:30px;padding-right:30px;">
+	
+	
+	<button onclick="loadRegisterProviderForm()" type="button" class="btn btn-outline-primary">Register Provider</button>
+	
+	<br><br>
+<div id="providerEquipmentForm"  >
+	
+	<label for="providerIdInput"><b>Enter Adhaar Id</b></label>
+	<input id="providerIdInput" name="providerIdInput">
+	<!-- <input type="button" class="btn btn-success btn-sm" value="View my equipments" onclick="getEquipment()"> -->
+	<input type="button" class="btn btn-success btn-sm" value="view equipments" onclick="viewEquipment()">
+	<input type="button" class="btn btn-success btn-sm" value="View equipmentProvider" onclick="viewProvider()">
+
+</div>
+
+<div id="tableDataEquipment" style="display:none">
+		<table class="table">
+		  	<thead class="table-dark">
+		    	<tr>
+					
+					<th scope="col">Equipment Id</th>
+					<th scope="col">Equipment Name</th>
+					<th scope="col">Price</th>
+					
+					<th scope="col">EquipmentProvider Id</th>
+				
+				</tr>
+		  	</thead>
+		  
+		  	<tbody id="Equipment-table-body">
+			</tbody>
+	  
+		</table>
+	</div>
+
+<div id="addEquipments" style="display:none">
+	<br><label for="equipmentIdInput">Enter the equipmentId</label><input id="equipmentIdInput" name="equipmentIdInput"><br>
+
+	<label for="equipmentNameInput">Enter the equipmentName </label><input id="equipmentNameInput" name="equipmentNameInput"><br>
+	<label for="priceInput">Enter the price</label><input id="priceInput" name="priceInput"><br>
+	
+	<label for="providerIdInput">Enter your Adhaar Id</label><input id="providerIdInput" name="providerIdInput"><br>
+	<input type="button" class="btn btn-success btn-sm" value="Add" onclick="addEquipmentDetail()">
+
+</div>
+
+<div id="tableProviderData" style="display:none">
+		<table class="table">
+		  	<thead class="table-dark">
+		    	<tr>
+					
+					<th scope="col">Provider Id</th>
+					<th scope="col">Provider Name</th>
+					<th scope="col">Contact</th>
+					<th scope="col">Email Id</th>
+					<th scope="col">Company Name</th>
+					<th scope="col">Provider Rating</th>
+					
+					
+					
+				</tr>
+		  	</thead>
+		  
+		  	<tbody id="Provider-table-body">
+			</tbody>
+	  
+		</table>
+	</div>
+	
+<div id="providerAddForm" style="display:none">
+	
+	<h1 class="display-6">Provider Registration</h1>
+	<br>
+	
+	<label for="providerIdInputAddForm">Enter Aadhar Id</label>
+	<input id="providerIdInputAddForm" name="providerIdInput">
+	<br><br>
+	<label for="providerNameInputAddForm">Enter Name</label>
+	<input id="providerNameInputAddForm" name="providerNameInput">
+	<br><br>
+	<label for="contactInputAddForm">Enter contact</label>
+	<input id="contactInputAddForm" name="contactInput">
+	<br><br>
+	<label for="emailInputAddForm">Enter Email Id</label>
+	<input id="emailInputAddForm" name="emailInput">
+	<br><br>
+	<label for="companyNameInputAddForm">Enter Company Name</label>
+	<input id="companyNameInputAddForm" name="companyNameInput">
+	<br><br>
+	<label for="providerRatingInputAddForm">Enter Rating as per government</label>
+	<input id="providerRatingInputAddForm" name="providerRatingInput">
+	<br><br>
+	
+	<input type="button" class="btn btn-success btn-sm" value="Register Me!" onclick=sendProviderDetailInfo()>
+	
+
+</div>
+</body>
+</html>
