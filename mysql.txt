@@ -1,0 +1,123 @@
+create database FarmerSchemeV1;
+use FarmerSchemeV1;
+show tables;
+
+create table FarmerDetails (
+farmerId BIGINT primary key,
+farmerName VARCHAR(50),
+contact BIGINT,
+city VARCHAR(20),
+emailId VARCHAR(50),
+farmerRating FLOAT,
+constraint checkfarmerRating check (farmerRating>=0 and farmerRating<=5)
+);
+desc FarmerDetails;
+
+create table Crop(
+cropId INT primary key,
+cropName VARCHAR(50)
+);
+desc Crop;
+
+create table FarmerAndCrop(
+farmerId BIGINT ,
+cropId INT ,
+foreign key(farmerId) references FarmerDetails(farmerId),
+foreign key(cropId) references Crop(cropId),
+Primary KEY(farmerId,cropId)
+);
+desc FarmerAndCrop;
+create table CropForSale(
+cropForSaleId BIGINT primary key auto_increment,
+farmerId BIGINT,
+cropId INT,
+quantity FLOAT,
+minimumPrice FLOAT,
+timeUpload DATE,
+foreign key(farmerId) references FarmerDetails(farmerId),
+foreign key(cropId) references Crop(cropId),
+constraint checkminimumPriceANDquantity  check (minimumPrice>=0 and quantity>=0)
+
+);
+alter table CropForSale auto_increment=1;
+create table BidderDetails(
+bidderId BIGINT primary key,
+bidderName VARCHAR(50),
+contact BIGINT,
+city VARCHAR(20),
+emailId VARCHAR(50),
+bidderRating FLOAT,
+constraint checkbidderRating check (bidderRating>=0 and bidderRating<=5)
+);
+
+create table Bids(
+bidId BIGINT primary key auto_increment,
+bidderId BIGINT,
+cropForSaleId BIGINT,
+amount FLOAT,
+foreign key(cropForSaleId) references cropForSale(cropForSaleId),
+foreign key(bidderId) references BidderDetails(BidderId)
+);
+alter table Bids auto_increment=1;
+
+desc Bids;
+
+create table SuccessfulTransaction
+(
+transactionId BIGINT primary key auto_increment,
+bidId BIGINT,
+transactionDate DATE,
+foreign key(bidId) references Bids(bidId)
+);
+alter table SuccessfulTransaction auto_increment=1;
+desc SuccessfulTransaction;
+
+
+create table InsecticideProviderDetails(
+insecticideProviderId BIGINT primary key,
+insecticideProviderName VARCHAR(50),
+contact BIGINT,
+emailId VARCHAR(50),
+companyName VARCHAR(20),
+insecticideProviderRating FLOAT,
+constraint insecticideProviderRating check (insecticideProviderRating>=0 and insecticideProviderRating<=5)
+);
+desc InsecticideProviderDetails;
+
+create table Insecticide(
+insecticideId INT primary key,
+insecticideName VARCHAR(50),
+price FLOAT
+);
+
+create table InsecticideProviderAndInsecticide(
+insecticideId INT,
+insecticideProviderId BIGINT,
+foreign key(insecticideId) references Insecticide(insecticideId),
+foreign key(insecticideProviderId) references InsecticideProviderDetails(insecticideProviderId),
+primary key(insecticideId,insecticideProviderId)
+);
+
+
+create table EquipmentProviderDetails(
+equipmentProviderId BIGINT primary key,
+equipmentProviderName VARCHAR(50),
+contact BIGINT,
+emailId VARCHAR(50),
+companyName VARCHAR(20),
+equipmentProviderRating FLOAT
+);
+
+create table Equipment(
+equipmentId INT primary key,
+equipmentName VARCHAR(50),
+price FLOAT);
+
+
+create table EquipmentProviderAndEquipment(
+equipmentId INT,
+equipmentProviderId BIGINT,
+foreign key (equipmentId) references Equipment(equipmentId),
+foreign key (equipmentProviderId) references EquipmentProviderDetails(equipmentProviderId),
+primary key(equipmentId,equipmentProviderId)
+);
